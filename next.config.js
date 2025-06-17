@@ -7,9 +7,9 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  // 如果您的仓库名不是 username.github.io，请取消注释下面这行并替换为您的仓库名
-  // basePath: '/your-repo-name',
-  // assetPrefix: '/your-repo-name/',
+  // GitHub Pages配置 - 仓库名为blog
+  basePath: '/blog',
+  assetPrefix: '/blog/',
 }
 
 module.exports = nextConfig 

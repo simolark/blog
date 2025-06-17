@@ -42,17 +42,40 @@ export default function LanguageToggle() {
     <button
       onClick={toggleLocale}
       disabled={isChanging}
-      className={`flex items-center space-x-2 px-3 py-2 rounded-lg bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:bg-white hover:shadow-lg transition-all duration-300 group ${
+      className={`group relative flex items-center space-x-2 px-4 py-2 rounded-2xl backdrop-blur-lg border border-white/20 transition-all duration-300 hover:scale-105 active:scale-95 overflow-hidden ${
         isChanging ? 'opacity-50 cursor-not-allowed' : ''
       }`}
     >
-      <div className="flex items-center space-x-1">
-        <span className={`text-sm font-medium text-gray-700 transition-opacity duration-200 ${isChanging ? 'opacity-0' : 'opacity-100'}`}>
-          {locale === 'en' ? 'EN' : '中'}
-        </span>
+      {/* Background effects */}
+      <div className="absolute inset-0 bg-gradient-to-r from-teal-500/5 via-cyan-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-teal-500 to-cyan-500 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
+      
+      {/* Ripple effect on click */}
+      <div className={`absolute inset-0 bg-white/20 rounded-2xl transform transition-transform duration-300 ${
+        isChanging ? 'scale-100' : 'scale-0'
+      }`}></div>
+      
+      <div className="flex items-center space-x-2 relative z-10">
+        <div className="relative">
+          <span className={`text-sm font-medium transition-all duration-300 ${
+            isChanging ? 'opacity-0 scale-75' : 'opacity-100 scale-100'
+          } ${
+            isChanging ? 'text-teal-600' : 'text-gray-700 group-hover:text-white'
+          }`}>
+            {locale === 'en' ? 'EN' : '中'}
+          </span>
+          
+          {/* Loading indicator */}
+          {isChanging && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-3 h-3 border border-teal-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
+        </div>
+        
         <svg 
-          className={`w-4 h-4 text-gray-500 transition-all duration-300 ${
-            isChanging ? 'rotate-180 scale-110' : 'group-hover:rotate-180'
+          className={`w-4 h-4 transition-all duration-300 ${
+            isChanging ? 'rotate-180 scale-110 text-teal-500' : 'group-hover:rotate-180 text-gray-600 group-hover:text-white'
           }`} 
           fill="none" 
           stroke="currentColor" 

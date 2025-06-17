@@ -366,3 +366,305 @@
     font-size: 16px;
   }
 }
+
+/* 液态玻璃设计语言 - 全局样式 */
+
+:root {
+  /* 液态玻璃颜色变量 */
+  --liquid-glass-primary: rgba(255, 255, 255, 0.25);
+  --liquid-glass-secondary: rgba(255, 255, 255, 0.18);
+  --liquid-glass-border: rgba(255, 255, 255, 0.18);
+  --liquid-frost-blur: 16px;
+  
+  /* 动态渐变背景 */
+  --liquid-bg-gradient: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.05) 25%,
+    rgba(59, 130, 246, 0.05) 50%,
+    rgba(147, 51, 234, 0.05) 75%,
+    rgba(236, 72, 153, 0.05) 100%
+  );
+}
+
+/* 液态玻璃基础样式类 */
+@layer components {
+  
+  /* 主要液态玻璃容器 */
+  .liquid-glass {
+    @apply bg-white/25 shadow-lg;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  
+  /* 液态玻璃卡片 */
+  .liquid-card {
+    @apply liquid-glass rounded-3xl p-6 transition-all duration-500;
+    @apply hover:shadow-xl hover:bg-white/30;
+    @apply animate-pulse;
+  }
+  
+  /* 液态玻璃按钮 */
+  .liquid-btn {
+    @apply liquid-glass rounded-full px-6 py-3 font-medium;
+    @apply transition-all duration-300 cursor-pointer;
+    @apply hover:bg-white/40 hover:shadow-lg;
+    @apply active:scale-95 active:shadow-inner;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .liquid-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    transition: left 0.5s;
+  }
+  
+  .liquid-btn:hover::before {
+    left: 100%;
+  }
+  
+  /* 液态玻璃输入框 */
+  .liquid-input {
+    @apply liquid-glass rounded-2xl px-4 py-3 w-full;
+    @apply focus:outline-none focus:shadow-lg;
+    @apply placeholder:text-black/50;
+    background: rgba(255, 255, 255, 0.15);
+  }
+  
+  /* 液态导航栏 */
+  .liquid-nav {
+    @apply liquid-glass rounded-full;
+    @apply animate-pulse;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+  
+  /* 液态标签 */
+  .liquid-tag {
+    @apply bg-blue-500/30 rounded-full px-3 py-1 text-sm;
+    @apply hover:bg-purple-500/30 transition-all duration-300;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  /* 液态模态框 */
+  .liquid-modal {
+    @apply liquid-glass rounded-3xl p-8 max-w-lg mx-auto;
+    @apply animate-pulse shadow-2xl;
+    backdrop-filter: blur(32px);
+    -webkit-backdrop-filter: blur(32px);
+  }
+  
+  /* 液态进度条 */
+  .liquid-progress {
+    @apply liquid-glass rounded-full h-2 overflow-hidden;
+  }
+  
+  .liquid-progress-bar {
+    @apply h-full bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500;
+    @apply animate-pulse rounded-full;
+    background-size: 200% 100%;
+  }
+  
+  /* 液态文本效果 */
+  .liquid-text-gradient {
+    @apply bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600;
+    @apply bg-clip-text text-transparent animate-pulse;
+    background-size: 200% 100%;
+  }
+  
+  /* 液态背景动画 */
+  .liquid-bg-animated {
+    background: var(--liquid-bg-gradient);
+    background-size: 400% 400%;
+    animation: liquidFlow 15s ease infinite;
+  }
+  
+  /* 液态悬浮效果 */
+  .liquid-hover-float {
+    @apply transition-all duration-500;
+    @apply hover:transform hover:-translate-y-2 hover:shadow-xl;
+  }
+  
+  /* 液态边框动画 */
+  .liquid-border-animated {
+    position: relative;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(255, 255, 255, 0.1) 100%
+    );
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  
+  .liquid-border-animated::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    background: conic-gradient(
+      from 0deg,
+      transparent,
+      rgba(59, 130, 246, 0.5),
+      rgba(147, 51, 234, 0.5),
+      rgba(236, 72, 153, 0.5),
+      transparent
+    );
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    animation: liquidFlow 3s linear infinite;
+  }
+  
+  /* 液态涟漪效果 */
+  .liquid-ripple {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .liquid-ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  .liquid-ripple:active::after {
+    width: 300px;
+    height: 300px;
+  }
+}
+
+/* 液态玻璃响应式设计 */
+@layer utilities {
+  
+  /* 移动端液态玻璃优化 */
+  @media (max-width: 768px) {
+    .liquid-glass {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    
+    .liquid-card {
+      @apply p-4 rounded-2xl;
+    }
+    
+    .liquid-modal {
+      @apply p-6 mx-4;
+    }
+  }
+  
+  /* 深色模式液态玻璃 */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --liquid-glass-primary: rgba(0, 0, 0, 0.25);
+      --liquid-glass-secondary: rgba(0, 0, 0, 0.18);
+      --liquid-glass-border: rgba(255, 255, 255, 0.1);
+    }
+    
+    .liquid-glass {
+      @apply bg-black/25;
+      background: linear-gradient(
+        135deg,
+        rgba(0, 0, 0, 0.25) 0%,
+        rgba(0, 0, 0, 0.1) 100%
+      );
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .liquid-btn {
+      @apply hover:bg-black/40;
+    }
+    
+    .liquid-input {
+      background: rgba(0, 0, 0, 0.15);
+      @apply placeholder:text-white/50;
+    }
+  }
+  
+  /* 高性能模式 - 减少动画 */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-pulse,
+    .animate-bounce,
+    .animate-spin {
+      animation: none;
+    }
+    
+    .liquid-btn::before {
+      display: none;
+    }
+  }
+}
+
+/* 页面加载动画 */
+.liquid-page-enter {
+  animation: liquidPageEnter 0.8s ease-out;
+}
+
+@keyframes liquidPageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.6) 0%,
+    rgba(147, 51, 234, 0.6) 100%
+  );
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.8) 0%,
+    rgba(147, 51, 234, 0.8) 100%
+  );
+}

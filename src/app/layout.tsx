@@ -29,10 +29,10 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased text-base sm:text-lg">
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+        <div className="min-h-screen liquid-bg-animated">
           <Header />
           
-          <main className="relative">
+          <main className="relative liquid-page-enter">
             {children}
           </main>
           

@@ -20,6 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css"
@@ -27,7 +28,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased text-base sm:text-lg">
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
           <Header />
           

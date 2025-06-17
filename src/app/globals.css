@@ -15,10 +15,18 @@
     @apply bg-white text-gray-900 antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
   }
   
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  * {
+    box-sizing: border-box;
   }
 
   /* Custom scrollbar */
@@ -88,29 +96,66 @@
   /* Responsive math */
   @media (max-width: 640px) {
     .katex {
-      font-size: 1em !important;
+      font-size: 0.9em !important;
     }
     
     .katex-display {
       margin: 1em 0 !important;
+      padding: 0 1rem;
     }
 
     .katex .arraycolsep {
-      width: 0.3em;
+      width: 0.25em;
     }
   }
 }
 
 @layer components {
+  /* 文本截断工具类 */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  /* 触摸友好的按钮样式 */
+  .btn-touch {
+    min-height: 44px;
+    min-width: 44px;
+    @apply flex items-center justify-center;
+  }
+
   /* Modern Typography */
   .prose {
     @apply max-w-none text-gray-700;
-    font-size: 18px;
-    line-height: 1.8;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  @media (min-width: 640px) {
+    .prose {
+      font-size: 18px;
+      line-height: 1.8;
+    }
   }
 
   .prose h1 {
-    @apply text-3xl font-bold mb-8 text-gray-900 mt-12 first:mt-0;
+    @apply text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-gray-900 mt-8 sm:mt-12 first:mt-0;
     background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -118,7 +163,7 @@
   }
 
   .prose h2 {
-    @apply text-2xl font-bold mb-6 mt-12 text-gray-900;
+    @apply text-xl sm:text-2xl font-bold mb-4 sm:mb-6 mt-8 sm:mt-12 text-gray-900;
     background: linear-gradient(135deg, #374151 0%, #6b7280 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -126,15 +171,15 @@
   }
 
   .prose h3 {
-    @apply text-xl font-semibold mb-4 mt-8 text-gray-900;
+    @apply text-lg sm:text-xl font-semibold mb-3 sm:mb-4 mt-6 sm:mt-8 text-gray-900;
   }
 
   .prose p {
-    @apply mb-6 leading-relaxed;
+    @apply mb-4 sm:mb-6 leading-relaxed;
   }
 
   .prose ul {
-    @apply list-none mb-6 space-y-2;
+    @apply list-none mb-4 sm:mb-6 space-y-2;
   }
 
   .prose ul li {
@@ -147,7 +192,7 @@
   }
 
   .prose ol {
-    @apply list-decimal list-inside mb-6 space-y-2;
+    @apply list-decimal list-inside mb-4 sm:mb-6 space-y-2;
   }
 
   .prose li {
@@ -161,16 +206,16 @@
   }
 
   .prose blockquote {
-    @apply border-l-4 border-blue-200 pl-6 py-2 italic my-8 text-gray-600 bg-blue-50/50 rounded-r-lg;
+    @apply border-l-4 border-blue-200 pl-4 sm:pl-6 py-2 italic my-6 sm:my-8 text-gray-600 bg-blue-50/50 rounded-r-lg;
   }
 
   .prose code {
-    @apply bg-gray-100 rounded-md px-2 py-1 text-sm font-mono text-gray-800 border border-gray-200;
+    @apply bg-gray-100 rounded-md px-1.5 sm:px-2 py-1 text-sm font-mono text-gray-800 border border-gray-200;
     font-family: var(--font-mono);
   }
 
   .prose pre {
-    @apply bg-gray-900 rounded-xl p-6 overflow-x-auto my-8 border border-gray-200;
+    @apply bg-gray-900 rounded-lg sm:rounded-xl p-4 sm:p-6 overflow-x-auto my-6 sm:my-8 border border-gray-200;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
 
@@ -180,7 +225,7 @@
   }
 
   .prose img {
-    @apply rounded-2xl my-8 border border-gray-200 shadow-lg;
+    @apply rounded-lg sm:rounded-2xl my-6 sm:my-8 border border-gray-200 shadow-lg w-full;
   }
 
   .prose strong {
@@ -192,29 +237,47 @@
   }
 
   .prose hr {
-    @apply border-gray-200 my-12;
+    @apply border-gray-200 my-8 sm:my-12;
   }
 
   /* Math equation styling */
   .prose .katex-display {
-    @apply my-8 p-4 bg-gray-50/80 rounded-xl border border-gray-200/50;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    @apply my-6 sm:my-8 p-3 sm:p-4 bg-gray-50/80 rounded-lg sm:rounded-xl border border-gray-200/50;
+  }
+
+  /* 移动端数学公式滚动提示 */
+  @media (max-width: 640px) {
+    .prose .katex-display {
+      position: relative;
+    }
+    
+    .prose .katex-display::after {
+      content: "👈 滑动查看";
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      font-size: 10px;
+      color: #6b7280;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 2px 6px;
+      border-radius: 4px;
+      opacity: 0.7;
+    }
   }
 
   .prose .katex {
-    color: #374151 !important;
+    @apply text-gray-800;
   }
 
-  /* Matrix styling in prose */
   .prose .katex-display .mtable {
-    margin: 0.5em 0;
+    @apply mx-auto;
   }
 
   .prose .katex-display .arraycolsep {
-    width: 0.6em;
+    width: 0.5em;
   }
 
-  /* Custom components */
+  /* Gradient text utility */
   .gradient-text {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;
@@ -222,15 +285,21 @@
     background-clip: text;
   }
 
+  /* Glass morphism effect */
   .glass-morphism {
-    @apply bg-white/60 backdrop-blur-sm border border-gray-200/50;
+    @apply backdrop-blur-md bg-white/30 border border-white/20;
   }
 
+  /* Hover lift effect */
   .hover-lift {
-    @apply hover:shadow-xl hover:shadow-blue-500/10 transition-all duration-500 hover:-translate-y-1;
+    @apply transition-transform duration-300 hover:-translate-y-1;
   }
 
-  /* Animations */
+  /* 移动端触摸反馈 */
+  .touch-feedback {
+    @apply active:scale-95 transition-transform duration-150;
+  }
+
   @keyframes fadeInUp {
     from {
       opacity: 0;
@@ -259,9 +328,15 @@
     animation: float 3s ease-in-out infinite;
   }
 
-  /* Focus styles */
+  /* Focus styles for accessibility */
   .focus-ring {
     @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  }
+
+  /* 改善移动端滚动性能 */
+  .smooth-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 }
 
@@ -274,13 +349,20 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 移动端优化 */
+@media (max-width: 640px) {
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  /* 防止移动端双击缩放 */
+  button, input, select, textarea {
+    font-size: 16px;
+  }
 }

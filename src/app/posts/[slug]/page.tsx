@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import PostContent from '@/components/PostContent'
+import { getPostBySlug } from '@/lib/posts'
 
 interface Post {
   slug: string
@@ -16,20 +17,8 @@ interface Post {
 
 async function getPost(slug: string): Promise<Post | null> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/posts/${slug}`, {
-      cache: 'no-store',
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'
-      }
-    })
-    
-    if (!response.ok) {
-      return null
-    }
-    
-    return response.json()
+    const post = await getPostBySlug(slug)
+    return post
   } catch (error) {
     console.error(`Error fetching post ${slug}:`, error)
     return null

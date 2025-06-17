@@ -1,4 +1,5 @@
 import HomeContent from '@/components/HomeContent'
+import { getAllPosts } from '@/lib/posts'
 
 interface Post {
   slug: string
@@ -14,21 +15,8 @@ interface Post {
 
 async function getPosts(): Promise<Post[]> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/posts`, {
-      cache: 'no-store',
-      headers: {
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma': 'no-cache',
-        'Expires': '0'
-      }
-    })
-    
-    if (!response.ok) {
-      console.error('Failed to fetch posts:', response.statusText)
-      return []
-    }
-    
-    return response.json()
+    const posts = await getAllPosts()
+    return posts
   } catch (error) {
     console.error('Error fetching posts:', error)
     return []

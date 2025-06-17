@@ -1,9 +1,31 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useTranslation } from '@/hooks/useTranslation'
 
 export default function Footer() {
-  const { t, isHydrated } = useTranslation()
+  const { t, isHydrated, locale } = useTranslation()
+  const [displayText, setDisplayText] = useState('All rights reserved')
+  const [isTransitioning, setIsTransitioning] = useState(false)
+
+  // 处理语言切换的平滑过渡
+  useEffect(() => {
+    if (!isHydrated) return
+
+    const newText = t('footer.rights')
+    if (newText !== displayText) {
+      setIsTransitioning(true)
+      
+      // 淡出当前文本
+      setTimeout(() => {
+        setDisplayText(newText)
+        // 淡入新文本
+        setTimeout(() => {
+          setIsTransitioning(false)
+        }, 150)
+      }, 150)
+    }
+  }, [t, isHydrated, locale])
 
   return (
     <footer className="mt-20 mx-4 mb-6">
@@ -20,9 +42,15 @@ export default function Footer() {
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-600/20 rounded-2xl blur animate-pulse"></div>
               </div>
-              <span className="text-gray-700 font-medium">
-                © {new Date().getFullYear()} Yi He. {isHydrated ? t('footer.rights') : 'All rights reserved'}.
-              </span>
+              
+              {/* 版权文本区域 - 添加平滑过渡效果 */}
+              <div className="relative overflow-hidden">
+                <span className={`text-gray-700 font-medium transition-all duration-300 inline-block ${
+                  isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'
+                }`}>
+                  © {new Date().getFullYear()} Yi He. {displayText}.
+                </span>
+              </div>
             </div>
             
             <div className="flex items-center space-x-4">

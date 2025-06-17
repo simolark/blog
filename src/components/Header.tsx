@@ -1,12 +1,51 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from '@/hooks/useTranslation'
 import LanguageToggle from './LanguageToggle'
 
 export default function Header() {
-  const { t, isHydrated } = useTranslation()
+  const { t, isHydrated, locale } = useTranslation()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  
+  // 翻译文本状态，用于平滑过渡
+  const [displayTexts, setDisplayTexts] = useState({
+    title: 'Yi He Blog',
+    home: 'Home',
+    about: 'About Me',
+    status: 'Online'
+  })
+  const [isTransitioning, setIsTransitioning] = useState(false)
+
+  // 处理语言切换的平滑过渡
+  useEffect(() => {
+    if (!isHydrated) return
+
+    const newTexts = {
+      title: t('header.title'),
+      home: t('header.home'),
+      about: t('header.about'),
+      status: t('header.status')
+    }
+
+    // 检查是否有文本需要更新
+    const hasChanges = Object.keys(newTexts).some(key => 
+      newTexts[key as keyof typeof newTexts] !== displayTexts[key as keyof typeof displayTexts]
+    )
+
+    if (hasChanges) {
+      setIsTransitioning(true)
+      
+      // 淡出当前文本
+      setTimeout(() => {
+        setDisplayTexts(newTexts)
+        // 淡入新文本
+        setTimeout(() => {
+          setIsTransitioning(false)
+        }, 200)
+      }, 200)
+    }
+  }, [t, isHydrated, locale])
 
   return (
     <header className="sticky top-0 z-50 mx-4 mt-4">
@@ -20,9 +59,13 @@ export default function Header() {
                 </div>
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-500/20 to-purple-600/20 rounded-2xl blur group-hover:blur-md transition-all duration-300 -z-10"></div>
               </div>
-              <span className="font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 transition-all duration-300">
-                {isHydrated ? t('header.title') : 'Yi He Blog'}
-              </span>
+              <div className="relative overflow-hidden">
+                <span className={`font-bold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 transition-all duration-300 inline-block ${
+                  isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'
+                }`}>
+                  {displayTexts.title}
+                </span>
+              </div>
             </a>
             
             {/* Desktop Navigation */}
@@ -31,14 +74,26 @@ export default function Header() {
                 href="/" 
                 className="relative text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium group py-2"
               >
-                <span className="relative z-10">{isHydrated ? t('header.home') : 'Home'}</span>
+                <div className="relative overflow-hidden">
+                  <span className={`relative z-10 transition-all duration-300 inline-block ${
+                    isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'
+                  }`}>
+                    {displayTexts.home}
+                  </span>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 -z-10"></div>
               </a>
               <a 
                 href="https://simolark.com" 
                 className="relative text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium group py-2"
               >
-                <span className="relative z-10">{isHydrated ? t('header.about') : 'About Me'}</span>
+                <div className="relative overflow-hidden">
+                  <span className={`relative z-10 transition-all duration-300 inline-block ${
+                    isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'
+                  }`}>
+                    {displayTexts.about}
+                  </span>
+                </div>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 -z-10"></div>
               </a>
               
@@ -49,9 +104,13 @@ export default function Header() {
                   <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
                   <div className="absolute inset-0 w-2 h-2 bg-emerald-400 rounded-full animate-ping"></div>
                 </div>
-                <span className="text-sm text-emerald-700 font-medium">
-                  {isHydrated ? t('header.status') : 'Online'}
-                </span>
+                <div className="relative overflow-hidden">
+                  <span className={`text-sm text-emerald-700 font-medium transition-all duration-300 inline-block ${
+                    isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'
+                  }`}>
+                    {displayTexts.status}
+                  </span>
+                </div>
               </div>
               
               <div className="w-px h-6 bg-gradient-to-b from-transparent via-gray-300 to-transparent"></div>
@@ -88,7 +147,13 @@ export default function Header() {
                   className="block relative text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium py-3 px-4 rounded-2xl group"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <span className="relative z-10">{isHydrated ? t('header.home') : 'Home'}</span>
+                  <div className="relative overflow-hidden">
+                    <span className={`relative z-10 transition-all duration-300 inline-block ${
+                      isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'
+                    }`}>
+                      {displayTexts.home}
+                    </span>
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-2xl"></div>
                 </a>
                 <a 
@@ -96,7 +161,13 @@ export default function Header() {
                   className="block relative text-gray-700 hover:text-blue-600 transition-all duration-300 font-medium py-3 px-4 rounded-2xl group"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <span className="relative z-10">{isHydrated ? t('header.about') : 'About Me'}</span>
+                  <div className="relative overflow-hidden">
+                    <span className={`relative z-10 transition-all duration-300 inline-block ${
+                      isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'
+                    }`}>
+                      {displayTexts.about}
+                    </span>
+                  </div>
                   <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 rounded-2xl"></div>
                 </a>
                 <div className="flex items-center space-x-2 bg-gradient-to-r from-emerald-500/10 to-emerald-600/10 backdrop-blur-lg border border-emerald-200/20 rounded-2xl px-4 py-3 w-fit">
@@ -104,9 +175,13 @@ export default function Header() {
                     <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
                     <div className="absolute inset-0 w-2 h-2 bg-emerald-400 rounded-full animate-ping"></div>
                   </div>
-                  <span className="text-sm text-emerald-700 font-medium">
-                    {isHydrated ? t('header.status') : 'Online'}
-                  </span>
+                  <div className="relative overflow-hidden">
+                    <span className={`text-sm text-emerald-700 font-medium transition-all duration-300 inline-block ${
+                      isTransitioning ? 'opacity-0 transform translate-y-2' : 'opacity-100 transform translate-y-0'
+                    }`}>
+                      {displayTexts.status}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

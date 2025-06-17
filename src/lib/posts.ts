@@ -8,6 +8,7 @@ import rehypeKatex from 'rehype-katex'
 import remarkRehype from 'remark-rehype'
 import rehypeStringify from 'rehype-stringify'
 import { unified } from 'unified'
+import remarkParse from 'remark-parse'
 
 const postsDirectory = path.join(process.cwd(), 'posts')
 
@@ -18,6 +19,63 @@ export interface Post {
   excerpt: string
   content: string
   tags?: string[]
+}
+
+async function processMarkdownContent(content: string): Promise<string> {
+  try {
+    // 使用unified处理markdown，支持HTML和数学公式
+    const result = await unified()
+      .use(remarkParse)
+      .use(remarkMath)
+      .use(remarkRehype, { allowDangerousHtml: true })
+      .use(rehypeKatex)
+      .use(rehypeStringify, { allowDangerousHtml: true })
+      .process(content)
+    
+    return String(result)
+  } catch (error) {
+    console.error('Advanced markdown processing failed, using manual processing:', error)
+    
+    // 备用：手动处理基本的 markdown 语法
+    let processedContent = content
+    
+    // 处理标题
+    processedContent = processedContent
+      .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+      .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+      .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+      .replace(/^#### (.*$)/gim, '<h4>$1</h4>')
+      .replace(/^##### (.*$)/gim, '<h5>$1</h5>')
+      .replace(/^###### (.*$)/gim, '<h6>$1</h6>')
+    
+    // 处理粗体和斜体
+    processedContent = processedContent
+      .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+    
+    // 处理代码块
+    processedContent = processedContent
+      .replace(/```([^`]*)```/gim, '<pre><code>$1</code></pre>')
+      .replace(/`([^`]+)`/gim, '<code>$1</code>')
+    
+    // 处理链接
+    processedContent = processedContent
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2">$1</a>')
+    
+    // 处理换行为段落
+    const paragraphs = processedContent.split(/\n\s*\n/)
+    processedContent = paragraphs.map(p => {
+      const trimmed = p.trim()
+      if (!trimmed) return ''
+      // 如果已经是HTML标签，就不包装p标签
+      if (trimmed.startsWith('<') && (trimmed.includes('<h') || trimmed.includes('<pre') || trimmed.includes('<ul') || trimmed.includes('<ol'))) {
+        return trimmed
+      }
+      return `<p>${trimmed}</p>`
+    }).join('\n')
+    
+    return processedContent
+  }
 }
 
 export async function getAllPosts(): Promise<Post[]> {
@@ -50,12 +108,8 @@ export async function getAllPosts(): Promise<Post[]> {
           const fileContents = fs.readFileSync(fullPath, 'utf8')
           const { data, content } = matter(fileContents)
           
-          // 使用remark处理markdown
-          const processedContent = await remark()
-            .use(remarkHtml)
-            .process(content)
-          
-          const contentHtml = processedContent.toString()
+          // 使用改进的markdown处理
+          const contentHtml = await processMarkdownContent(content)
 
           return {
             slug,
@@ -67,30 +121,42 @@ export async function getAllPosts(): Promise<Post[]> {
           }
         } catch (error) {
           console.error(`Error processing file ${fileName}:`, error)
-          // 使用简单的HTML转换作为备用
+          // 使用手动HTML处理作为备用
           try {
             const slug = fileName.replace(/\.md$/, '')
             const fullPath = path.join(postsDirectory, fileName)
             const fileContents = fs.readFileSync(fullPath, 'utf8')
             const { data, content } = matter(fileContents)
             
-            // 简单的markdown转换
-            const simpleHtml = content
+            // 简单处理，保留HTML标签不变
+            let processedContent = content
+            
+            // 处理markdown语法，但保留HTML标签
+            processedContent = processedContent
               .replace(/^# (.*$)/gim, '<h1>$1</h1>')
               .replace(/^## (.*$)/gim, '<h2>$1</h2>')
               .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-              .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
-              .replace(/\*(.*)\*/gim, '<em>$1</em>')
-              .replace(/\n\n/gim, '</p><p>')
-              .replace(/^(?!<[h|p|u|o])/gim, '<p>')
-              .replace(/$/gim, '</p>')
+              .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+              .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+            
+            // 处理段落，但不影响已存在的HTML标签
+            const paragraphs = processedContent.split(/\n\s*\n/)
+            processedContent = paragraphs.map(p => {
+              const trimmed = p.trim()
+              if (!trimmed) return ''
+              // 如果已经是HTML标签，就不包装p标签
+              if (trimmed.startsWith('<') && trimmed.endsWith('>')) {
+                return trimmed
+              }
+              return `<p>${trimmed}</p>`
+            }).join('\n')
             
             return {
               slug,
               title: data.title || slug,
               date: data.date || '2023-01-01',
               excerpt: data.excerpt || '',
-              content: simpleHtml,
+              content: processedContent,
               tags: data.tags || [],
             }
           } catch (fallbackError) {
@@ -126,12 +192,8 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     const { data, content } = matter(fileContents)
     
     try {
-      // 使用remark处理markdown
-      const processedContent = await remark()
-        .use(remarkHtml)
-        .process(content)
-      
-      const contentHtml = processedContent.toString()
+      // 使用改进的markdown处理
+      const contentHtml = await processMarkdownContent(content)
 
       return {
         slug,
@@ -142,25 +204,37 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
         tags: data.tags || [],
       }
     } catch (processingError) {
-      console.error('Markdown processing failed, using fallback:', processingError)
+      console.error('Markdown processing failed, using manual fallback:', processingError)
       
-      // 简单的markdown转换作为备用
-      const simpleHtml = content
+      // 手动处理作为备用，保留HTML标签
+      let processedContent = content
+      
+      // 处理markdown语法，但保留HTML标签
+      processedContent = processedContent
         .replace(/^# (.*$)/gim, '<h1>$1</h1>')
         .replace(/^## (.*$)/gim, '<h2>$1</h2>')
         .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-        .replace(/\*\*(.*)\*\*/gim, '<strong>$1</strong>')
-        .replace(/\*(.*)\*/gim, '<em>$1</em>')
-        .replace(/\n\n/gim, '</p><p>')
-        .replace(/^(?!<[h|p|u|o])/gim, '<p>')
-        .replace(/$/gim, '</p>')
+        .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+      
+      // 处理段落，但不影响已存在的HTML标签
+      const paragraphs = processedContent.split(/\n\s*\n/)
+      processedContent = paragraphs.map(p => {
+        const trimmed = p.trim()
+        if (!trimmed) return ''
+        // 如果已经是HTML标签，就不包装p标签
+        if (trimmed.startsWith('<') && trimmed.endsWith('>')) {
+          return trimmed
+        }
+        return `<p>${trimmed}</p>`
+      }).join('\n')
       
       return {
         slug,
         title: data.title || slug,
         date: data.date || '2023-01-01',
         excerpt: data.excerpt || '',
-        content: simpleHtml,
+        content: processedContent,
         tags: data.tags || [],
       }
     }

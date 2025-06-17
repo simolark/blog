@@ -7,9 +7,7 @@ const nextConfig = {
   images: {
     unoptimized: true
   },
-  // GitHub Pages配置 - 仓库名为blog
-  basePath: '/blog',
-  assetPrefix: '/blog/',
+  // 使用自定义域名时不需要 basePath 和 assetPrefix
 }
 
 module.exports = nextConfig 

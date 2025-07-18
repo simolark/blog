@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import PostContent from '@/components/PostContent'
-import { getPostBySlug } from '@/lib/posts'
+import { getPostBySlug, getAllPosts } from '@/lib/posts'
 
 interface Post {
   slug: string
@@ -31,8 +31,17 @@ interface Props {
   }
 }
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// 移除动态渲染配置以支持静态导出
+// export const dynamic = 'force-dynamic'
+// export const revalidate = 0
+
+// 生成静态参数，用于静态导出
+export async function generateStaticParams() {
+  const posts = await getAllPosts()
+  return posts.map((post) => ({
+    slug: post.slug,
+  }))
+}
 
 export default async function PostPage({ params }: Props) {
   const post = await getPost(params.slug)

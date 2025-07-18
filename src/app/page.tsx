@@ -23,8 +23,9 @@ async function getPosts(): Promise<Post[]> {
   }
 }
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+// 移除动态渲染配置以支持静态导出
+// export const dynamic = 'force-dynamic'
+// export const revalidate = 0
 
 export default async function Home() {
   const posts = await getPosts()

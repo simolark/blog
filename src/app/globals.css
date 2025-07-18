@@ -347,13 +347,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-  }
-}
-
 /* 移动端优化 */
 @media (max-width: 640px) {
   body {
@@ -578,34 +571,6 @@
     
     .liquid-modal {
       @apply p-6 mx-4;
-    }
-  }
-  
-  /* 深色模式液态玻璃 */
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --liquid-glass-primary: rgba(0, 0, 0, 0.25);
-      --liquid-glass-secondary: rgba(0, 0, 0, 0.18);
-      --liquid-glass-border: rgba(255, 255, 255, 0.1);
-    }
-    
-    .liquid-glass {
-      @apply bg-black/25;
-      background: linear-gradient(
-        135deg,
-        rgba(0, 0, 0, 0.25) 0%,
-        rgba(0, 0, 0, 0.1) 100%
-      );
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .liquid-btn {
-      @apply hover:bg-black/40;
-    }
-    
-    .liquid-input {
-      background: rgba(0, 0, 0, 0.15);
-      @apply placeholder:text-white/50;
     }
   }
   

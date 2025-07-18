@@ -52,24 +52,32 @@ export default function HomeContent({ posts }: HomeContentProps) {
               {postsByYear[year].map((post, index) => (
                 <article key={post.slug} className="relative">
                   <div className="relative liquid-glass rounded-3xl p-6 sm:p-8 backdrop-blur-lg border border-white/20">
+                    
+                    {/* Article Header */}
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6 gap-4">
-                      <div className="flex items-center space-x-4">
-                        <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center text-white font-bold text-sm backdrop-blur-lg border border-white/20 ${
-                          index % 3 === 0 ? 'bg-gradient-to-br from-blue-500 to-blue-600' :
-                          index % 3 === 1 ? 'bg-gradient-to-br from-emerald-500 to-emerald-600' :
-                          'bg-gradient-to-br from-purple-500 to-purple-600'
-                        }`}>
-                          {String(index + 1).padStart(2, '0')}
-                        </div>
-                        <div className="space-y-1">
-                          <time className="text-sm text-gray-600 font-medium block">
+                      <div className="flex-1">
+                        <Link href={`/posts/${post.slug}`} className="block">
+                          <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 line-clamp-2 leading-tight">
+                            {post.title}
+                          </h3>
+                        </Link>
+                        
+                        <div className="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                          <time dateTime={post.date} className="flex items-center">
+                            <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2z" />
+                            </svg>
                             {new Date(post.date).toLocaleDateString('en-US', {
                               month: 'long',
                               day: 'numeric'
                             })}
                           </time>
+                          
                           {post.readingTime && (
-                            <div className="text-xs text-gray-500">
+                            <div className="flex items-center">
+                              <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
                               {post.readingTime.en}
                             </div>
                           )}
@@ -77,7 +85,7 @@ export default function HomeContent({ posts }: HomeContentProps) {
                       </div>
                       
                       {post.tags && post.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-2 sm:justify-end">
                           {post.tags.slice(0, 3).map((tag, tagIndex) => (
                             <span
                               key={tag}
@@ -100,13 +108,8 @@ export default function HomeContent({ posts }: HomeContentProps) {
                       )}
                     </div>
                     
-                    <Link href={`/posts/${post.slug}`} className="block">
-                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-4 line-clamp-2 leading-tight">
-                        {post.title}
-                      </h3>
-                    </Link>
-                    
-                    <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-6 line-clamp-3">
+                    {/* Article Excerpt */}
+                    <p className="text-base sm:text-lg text-gray-700 leading-relaxed line-clamp-3">
                       {post.excerpt}
                     </p>
                   </div>

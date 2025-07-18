@@ -41,7 +41,6 @@ export default function HomeContent({ posts }: HomeContentProps) {
             <div className="flex items-center mb-8 sm:mb-10">
               <div className="relative">
                 <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{year}</h2>
-                <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
               </div>
               <div className="flex-1 h-px bg-gradient-to-r from-blue-200 via-purple-200 to-transparent ml-6"></div>
               <div className="liquid-glass px-4 py-2 rounded-full text-sm text-gray-700 font-medium backdrop-blur-lg border border-white/20">
@@ -51,12 +50,11 @@ export default function HomeContent({ posts }: HomeContentProps) {
             
             <div className="grid gap-6 sm:gap-8">
               {postsByYear[year].map((post, index) => (
-                <article key={post.slug} className="group relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-3xl transform scale-95 group-hover:scale-100 transition-transform duration-500 blur-sm"></div>
-                  <div className="relative liquid-glass rounded-3xl p-6 sm:p-8 backdrop-blur-lg border border-white/20 transition-all duration-500 hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-2 active:scale-[0.98]">
+                <article key={post.slug} className="relative">
+                  <div className="relative liquid-glass rounded-3xl p-6 sm:p-8 backdrop-blur-lg border border-white/20">
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6 gap-4">
                       <div className="flex items-center space-x-4">
-                        <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center text-white font-bold text-sm backdrop-blur-lg border border-white/20 transition-all duration-300 hover:scale-110 ${
+                        <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center text-white font-bold text-sm backdrop-blur-lg border border-white/20 ${
                           index % 3 === 0 ? 'bg-gradient-to-br from-blue-500 to-blue-600' :
                           index % 3 === 1 ? 'bg-gradient-to-br from-emerald-500 to-emerald-600' :
                           'bg-gradient-to-br from-purple-500 to-purple-600'
@@ -83,7 +81,7 @@ export default function HomeContent({ posts }: HomeContentProps) {
                           {post.tags.slice(0, 3).map((tag, tagIndex) => (
                             <span
                               key={tag}
-                              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium backdrop-blur-lg border border-white/20 transition-all duration-300 hover:scale-105 ${
+                              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium backdrop-blur-lg border border-white/20 ${
                                 tagIndex % 4 === 0 ? 'bg-blue-500/20 text-blue-700' :
                                 tagIndex % 4 === 1 ? 'bg-purple-500/20 text-purple-700' :
                                 tagIndex % 4 === 2 ? 'bg-emerald-500/20 text-emerald-700' :
@@ -102,8 +100,8 @@ export default function HomeContent({ posts }: HomeContentProps) {
                       )}
                     </div>
                     
-                    <Link href={`/posts/${post.slug}`} className="block group/title">
-                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 group-hover/title:bg-gradient-to-r group-hover/title:from-blue-600 group-hover/title:to-purple-600 group-hover/title:bg-clip-text group-hover/title:text-transparent transition-all duration-300 mb-4 line-clamp-2 leading-tight">
+                    <Link href={`/posts/${post.slug}`} className="block">
+                      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-4 line-clamp-2 leading-tight">
                         {post.title}
                       </h3>
                     </Link>

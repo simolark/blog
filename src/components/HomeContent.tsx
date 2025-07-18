@@ -34,19 +34,6 @@ export default function HomeContent({ posts }: HomeContentProps) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-      {/* Hero Section */}
-      <div className="text-center mb-16 sm:mb-20">
-        <div className="relative">
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold mb-6 sm:mb-8">
-            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-pulse">
-              Welcome to My Blog
-            </span>
-          </h1>
-          <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-2xl animate-bounce"></div>
-          <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-2xl animate-bounce delay-75"></div>
-        </div>
-      </div>
-
       {/* Articles by Year */}
       <div className="space-y-12 sm:space-y-16">
         {sortedYears.map((year) => (
@@ -124,16 +111,6 @@ export default function HomeContent({ posts }: HomeContentProps) {
                     <p className="text-base sm:text-lg text-gray-700 leading-relaxed mb-6 line-clamp-3">
                       {post.excerpt}
                     </p>
-                    
-                    <Link 
-                      href={`/posts/${post.slug}`}
-                      className="inline-flex items-center px-6 py-3 rounded-2xl font-medium group/btn text-gray-700 hover:text-white transition-all duration-300 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-blue-500 hover:to-purple-600 backdrop-blur-lg border border-white/20 hover:border-transparent hover:shadow-lg hover:shadow-blue-500/25 transform hover:scale-105 active:scale-95"
-                    >
-                      <span className="whitespace-nowrap">Read More</span>
-                      <svg className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </Link>
                   </div>
                 </article>
               ))}

@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { useTranslation } from '@/hooks/useTranslation'
 
 interface Post {
   slug: string
@@ -20,8 +19,6 @@ interface HomeContentProps {
 }
 
 export default function HomeContent({ posts }: HomeContentProps) {
-  const { t, locale, isHydrated } = useTranslation()
-
   // 按年份分组文章
   const postsByYear = posts.reduce((acc, post) => {
     const year = new Date(post.date).getFullYear()
@@ -34,11 +31,6 @@ export default function HomeContent({ posts }: HomeContentProps) {
 
   // 获取排序后的年份列表（从新到旧）
   const sortedYears = Object.keys(postsByYear).map(Number).sort((a, b) => b - a)
-
-  // 移除 hydration 检查，直接显示内容以支持静态导出
-  // if (!isHydrated) {
-  //   return skeleton screen...
-  // }
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -53,40 +45,20 @@ export default function HomeContent({ posts }: HomeContentProps) {
           <div className="absolute -top-4 -left-4 w-24 h-24 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-2xl animate-bounce"></div>
           <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-2xl animate-bounce delay-75"></div>
         </div>
-        <p className="text-xl sm:text-2xl text-gray-600 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed">
-          {locale === 'zh' ? '分享研究洞察、技术思考和机器学习前沿探索' : 'Sharing research insights, technical thoughts, and explorations in machine learning frontiers'}
-        </p>
-        <div className="flex flex-wrap gap-3 justify-center">
-          {['AI', 'Machine Learning', 'Research', 'Technology'].map((tag, index) => (
-            <span
-              key={tag}
-              className={`px-4 py-2 rounded-full text-sm font-medium backdrop-blur-md border border-white/20 transition-all duration-300 hover:scale-105 ${
-                index % 4 === 0 ? 'bg-blue-500/20 text-blue-700 hover:bg-blue-500/30' :
-                index % 4 === 1 ? 'bg-purple-500/20 text-purple-700 hover:bg-purple-500/30' :
-                index % 4 === 2 ? 'bg-emerald-500/20 text-emerald-700 hover:bg-emerald-500/30' :
-                'bg-pink-500/20 text-pink-700 hover:bg-pink-500/30'
-              }`}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
       </div>
 
-      {/* Posts by Year */}
+      {/* Articles by Year */}
       <div className="space-y-12 sm:space-y-16">
         {sortedYears.map((year) => (
           <div key={year} className="relative">
             <div className="flex items-center mb-8 sm:mb-10">
               <div className="relative">
-                <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  {year}
-                </h2>
+                <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{year}</h2>
                 <div className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
               </div>
               <div className="flex-1 h-px bg-gradient-to-r from-blue-200 via-purple-200 to-transparent ml-6"></div>
               <div className="liquid-glass px-4 py-2 rounded-full text-sm text-gray-700 font-medium backdrop-blur-lg border border-white/20">
-                {postsByYear[year].length} {postsByYear[year].length === 1 ? (locale === 'zh' ? '篇文章' : 'article') : (locale === 'zh' ? '篇文章' : 'articles')}
+                {postsByYear[year].length} {postsByYear[year].length === 1 ? 'article' : 'articles'}
               </div>
             </div>
             
@@ -106,17 +78,14 @@ export default function HomeContent({ posts }: HomeContentProps) {
                         </div>
                         <div className="space-y-1">
                           <time className="text-sm text-gray-600 font-medium block">
-                            {new Date(post.date).toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', {
+                            {new Date(post.date).toLocaleDateString('en-US', {
                               month: 'long',
                               day: 'numeric'
                             })}
                           </time>
                           {post.readingTime && (
-                            <div className="text-xs text-gray-500 flex items-center space-x-1">
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                              </svg>
-                              <span>{locale === 'zh' ? post.readingTime.zh : post.readingTime.en}</span>
+                            <div className="text-xs text-gray-500">
+                              {post.readingTime.en}
                             </div>
                           )}
                         </div>
@@ -160,7 +129,7 @@ export default function HomeContent({ posts }: HomeContentProps) {
                       href={`/posts/${post.slug}`}
                       className="inline-flex items-center px-6 py-3 rounded-2xl font-medium group/btn text-gray-700 hover:text-white transition-all duration-300 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-blue-500 hover:to-purple-600 backdrop-blur-lg border border-white/20 hover:border-transparent hover:shadow-lg hover:shadow-blue-500/25 transform hover:scale-105 active:scale-95"
                     >
-                      <span className="whitespace-nowrap">{t('home.readMore')}</span>
+                      <span className="whitespace-nowrap">Read More</span>
                       <svg className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
@@ -172,25 +141,6 @@ export default function HomeContent({ posts }: HomeContentProps) {
           </div>
         ))}
       </div>
-
-      {posts.length === 0 && (
-        <div className="text-center py-20 sm:py-24">
-          <div className="relative">
-            <div className="w-24 h-24 sm:w-32 sm:h-32 liquid-glass rounded-3xl flex items-center justify-center mx-auto mb-6 backdrop-blur-lg border border-white/20 hover:scale-110 transition-transform duration-500">
-              <svg className="w-12 h-12 sm:w-16 sm:h-16 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-4 w-16 h-16 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-xl animate-pulse"></div>
-          </div>
-          <h3 className="text-2xl sm:text-3xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              {t('home.noArticles.title')}
-            </span>
-          </h3>
-          <p className="text-lg text-gray-600 max-w-md mx-auto">{t('home.noArticles.description')}</p>
-        </div>
-      )}
     </div>
   )
 } 

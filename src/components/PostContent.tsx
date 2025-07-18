@@ -37,22 +37,10 @@ export default function PostContent({ post }: PostContentProps) {
     }
   }, [isHydrated, post.content])
 
-  // 在水合完成前显示加载状态
-  if (!isHydrated) {
-    return (
-      <div className="min-h-screen">
-        <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 border-b border-gray-200/50">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <div className="animate-pulse">
-              <div className="h-6 bg-gray-200 rounded w-32 mb-8"></div>
-              <div className="h-12 bg-gray-200 rounded w-96 mb-6"></div>
-              <div className="h-6 bg-gray-200 rounded w-80"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  // 移除 hydration 检查，直接显示内容以支持静态导出
+  // if (!isHydrated) {
+  //   return skeleton screen...
+  // }
 
   return (
     <div className="min-h-screen">

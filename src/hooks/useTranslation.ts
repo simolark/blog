@@ -8,28 +8,27 @@ export function useTranslation() {
   const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
-    const savedLocale = localStorage.getItem('locale') || 'en'
-    setLocale(savedLocale)
-    setIsHydrated(true)
+    if (typeof window !== 'undefined') {
+      const savedLocale = localStorage.getItem('locale') || 'en'
+      setLocale(savedLocale)
+      setIsHydrated(true)
 
-    const handleLocaleChange = (event: CustomEvent) => {
-      setLocale(event.detail)
-    }
+      const handleLocaleChange = (event: CustomEvent) => {
+        setLocale(event.detail)
+      }
 
-    window.addEventListener('localeChange', handleLocaleChange as EventListener)
-    
-    return () => {
-      window.removeEventListener('localeChange', handleLocaleChange as EventListener)
+      window.addEventListener('localeChange', handleLocaleChange as EventListener)
+      
+      return () => {
+        window.removeEventListener('localeChange', handleLocaleChange as EventListener)
+      }
     }
   }, [])
 
   const t = useCallback((key: TranslationKey) => {
-    if (!isHydrated) {
-      // 在水合完成前返回默认英文，避免闪烁
-      return getTranslation('en', key)
-    }
+    // 始终返回翻译内容，对于静态导出使用默认语言
     return getTranslation(locale, key)
-  }, [locale, isHydrated])
+  }, [locale])
 
   return { t, locale, isHydrated }
 } 

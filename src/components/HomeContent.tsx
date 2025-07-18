@@ -35,34 +35,10 @@ export default function HomeContent({ posts }: HomeContentProps) {
   // 获取排序后的年份列表（从新到旧）
   const sortedYears = Object.keys(postsByYear).map(Number).sort((a, b) => b - a)
 
-  // 在水合完成前显示加载状态
-  if (!isHydrated) {
-    return (
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <div className="animate-pulse space-y-8">
-          <div className="text-center mb-12 sm:mb-16">
-            <div className="h-6 sm:h-8 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full mx-auto w-48 sm:w-64 mb-4 sm:mb-6"></div>
-            <div className="h-12 sm:h-16 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full mx-auto w-80 sm:w-96 mb-4 sm:mb-6"></div>
-            <div className="h-4 sm:h-6 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full mx-auto w-64 sm:w-80"></div>
-          </div>
-          {[1, 2, 3].map(i => (
-            <div key={i} className="liquid-glass rounded-3xl p-6 space-y-4">
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-blue-200 to-purple-200 rounded-full"></div>
-                <div className="space-y-2 flex-1">
-                  <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded w-1/4"></div>
-                  <div className="h-3 bg-gradient-to-r from-gray-200 to-gray-300 rounded w-1/6"></div>
-                </div>
-              </div>
-              <div className="h-6 bg-gradient-to-r from-gray-200 to-gray-300 rounded w-3/4"></div>
-              <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded"></div>
-              <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded w-5/6"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }
+  // 移除 hydration 检查，直接显示内容以支持静态导出
+  // if (!isHydrated) {
+  //   return skeleton screen...
+  // }
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">

@@ -347,6 +347,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* 全局禁用动画效果 */
+* {
+  animation: none !important;
+  transition: none !important;
+}
+
 /* 移动端优化 */
 @media (max-width: 640px) {
   body {
@@ -588,12 +594,13 @@
   }
 }
 
-/* 页面加载动画 */
+/* 页面加载动画 - 已禁用 */
 .liquid-page-enter {
-  animation: liquidPageEnter 0.8s ease-out;
+  /* animation: liquidPageEnter 0.8s ease-out; */
+  animation: none;
 }
 
-@keyframes liquidPageEnter {
+/* @keyframes liquidPageEnter {
   from {
     opacity: 0;
     transform: translateY(20px) scale(0.95);
@@ -604,7 +611,7 @@
     transform: translateY(0) scale(1);
     filter: blur(0);
   }
-}
+} */
 
 /* 滚动条样式 */
 ::-webkit-scrollbar {

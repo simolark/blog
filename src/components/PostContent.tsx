@@ -36,7 +36,7 @@ export default function PostContent({ post }: PostContentProps) {
   }, [post.content])
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen liquid-page-enter">
       {/* Header with gradient background */}
       <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 border-b border-gray-200/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -105,7 +105,7 @@ export default function PostContent({ post }: PostContentProps) {
 
       {/* Article Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="bg-white/60 backdrop-blur-sm border border-gray-200/50 rounded-3xl p-8 md:p-12 shadow-xl shadow-gray-500/5">
+        <div className="liquid-glass backdrop-blur-lg border border-white/20 rounded-3xl p-8 md:p-12 shadow-xl shadow-blue-500/5">
           <article 
             ref={contentRef}
             className="prose prose-lg prose-gray max-w-none"

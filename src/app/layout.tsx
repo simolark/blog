@@ -32,7 +32,7 @@ export default function RootLayout({
         <div className="min-h-screen liquid-bg-animated">
           <Header />
           
-          <main className="relative liquid-page-enter">
+          <main className="relative">
             {children}
           </main>
           

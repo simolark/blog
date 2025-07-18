@@ -33,7 +33,7 @@ export default function HomeContent({ posts }: HomeContentProps) {
   const sortedYears = Object.keys(postsByYear).map(Number).sort((a, b) => b - a)
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 liquid-page-enter">
       {/* Articles by Year */}
       <div className="space-y-12 sm:space-y-16">
         {sortedYears.map((year) => (

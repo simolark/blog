@@ -2,7 +2,7 @@
 title: 'Fixed-size Batching：隐私保护机器学习的数学基础'
 date: '2025-07-02'
 excerpt: '深入探讨Fixed-size Batching在隐私保护机器学习中的理论基础、优势以及在现代隐私保护算法中的应用。'
-tags: ['机器学习', '隐私保护', '差分隐私', '理论分析']
+tags: ['隐私保护', '差分隐私']
 ---
 
 # Fixed-size Batching：隐私保护机器学习的数学基础

@@ -15,10 +15,13 @@ interface Post {
 
 async function getPosts(): Promise<Post[]> {
   try {
+    console.log('Attempting to fetch posts...')
     const posts = await getAllPosts()
+    console.log('Posts fetched successfully:', posts.length)
     return posts
   } catch (error) {
     console.error('Error fetching posts:', error)
+    console.error('Error stack:', error instanceof Error ? error.stack : error)
     return []
   }
 }
